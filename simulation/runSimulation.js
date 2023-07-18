@@ -21,17 +21,14 @@ class Simulation {
         this.jobMap = new Map();
         this.jobCount = 0;
         
-        
-
     }
-
+    // random seeding of patrols within
     initializePatrols() {
         for (let i = 0; i < this.patrolCount; i++) {
             const patrolId = `patrol${i}`
             const newPatrol = new Patrol(patrolId)
-            this.patrols.patrolId = newPatrol
+            this.patrols[patrolId] = newPatrol
         }
-        console.log(this.patrols)
     }
 
     async logNewBreakdown() {
@@ -39,18 +36,17 @@ class Simulation {
         const randomId = Math.floor(Math.random() * 1200);
         getMemberDetailsById(randomId)
           .then(member => {
-            console.log('member:', member, randomId);
             if (this.jobMap.has(randomId)) {
               console.log(`Job in with memberID: ${randomId} - Re-rolling!!!`);
               this.logNewBreakdown();
             } else {
               getLatandLongByQuery(member.address, member.postcode)
                 .then(coordinates => {
-                  const newBreakdown = new Breakdown(this.jobCount, member, coordinates);
-                  this.jobMap.set(randomId, newBreakdown);
-                  this.jobCount += 1;
-                  const setJob = this.jobMap.get(randomId);
+                  const newBreakdown = new Breakdown(this.jobCount, member, coordinates, randomId, this.currentTime);
+                  this.jobMap.set(this.jobCount, newBreakdown);
+                  const setJob = this.jobMap.get(this.jobCount);
                   console.log('JobCount:', this.jobCount, 'Set job:', setJob);
+                  this.jobCount += 1;
                 })
                 .catch(error => {
                   console.log(error);
@@ -59,38 +55,111 @@ class Simulation {
           });
       }
 
-    async assignFreePatrolsToQueued() {
-        console.log('assign patrol invoked')
-            this.jobMap.forEach((value, key) => {
-                const jobLoc = `${value.coordinates[0]},${value.coordinates[1]}`;
-                console.log('jobLoc', jobLoc)
-                console.log(`Key: ${key}, Value: ${value}`)
-                if (value.patrolAssigned === false) {
-                    let closestPatrolId = '';
-                    Object.entries(this.patrols).forEach(entry => {
-                        const [key, value] = entry;
-                        console.log('patrols key-value:', key, value)
-                        if (value.onJob === false) {
-                            const patrolLoc = `${value.currentLocation[0]},${value.currentLocation[1]}`
-                            console.log('!!!!!!????????')
-                            getDistanceAndTime(jobLoc, patrolLoc)
-                            .then(resObj => {
-                                console.log('distance @ sim', resObj.distance)
-
-                            })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                            
-                        }
+      async assignFreePatrolsToQueued() {
+        console.log('assign patrol invoked');
+        // loop through jobs map and check for patrolAssigned
+        this.jobMap.forEach((value, key) => {
+            //ASSIGNING ACTIVE JOB VALUES TO DOWN THERE!!
+            const activeJob = value;
+            const jobLoc = `${value.coordinates[0]},${value.coordinates[1]}`;
+            console.log('ACTIVE JOB LOC', jobLoc);
+            // console.log(`Key: ${key}, Value: ${value}`);
+            // if no patrol assigned map through patrols, check if patrol currently assigned
+            // if not assigned then add to a list of Promises to get distance and estimated travel time from API
+            if (value.patrolAssigned === false && value.jobCompleted === false) {               
+                const closestPatrolPromises = Object.entries(this.patrols).map(([patrolKey, patrolValue]) => {
+                    console.log('patrols key-value:', patrolKey, patrolValue);
+                    if (patrolValue.onJob === false) {
+                        const patrolLoc = `${patrolValue.currentLocation[0]},${patrolValue.currentLocation[1]}`;
+                        console.log('patrolLoc-jobLoc', patrolLoc, jobLoc);
+                        return getDistanceAndTime(jobLoc, patrolLoc)
+                            .then((resObj) => ({
+                                patrolId: patrolValue.patrolId,
+                                distance: Number(resObj.distance), // Convert distance to a number
+                                eta: resObj.eta,
+                                etaWithTraffic: resObj.etaWithTraffic,
+                            }))
+                            .catch((error) => {
+                                console.log(error);
+                                return null;
+                            });
+                    }
+                    return null;
+                });
+                // cash in promises
+                Promise.all(closestPatrolPromises)
+                    .then((closestPatrols) => {
+                        const filteredClosestPatrols = closestPatrols.filter((patrol) => patrol !== null);
+                        console.log('CLOSEST PATROL PROVISIONAL!!!!', filteredClosestPatrols);
+    
+                        // Find the closest patrol
+                        let finalClosestPatrol = null;
+                        filteredClosestPatrols.forEach((patrol) => {
+                            if (finalClosestPatrol === null || patrol.distance < finalClosestPatrol.distance) {
+                                finalClosestPatrol = patrol;
+                            }
+                        });
+                        const fixTimeMins = this.rollForFixTimeInMinutes()
+                        const travelTimeMins = this.rollForTravelTimeInMinutes(finalClosestPatrol.eta, finalClosestPatrol.etaWithTraffic)
+                        const totalTimeFromAssignment = fixTimeMins + travelTimeMins;
+                        const completionTime = this.addSeconds(this.currentTime, totalTimeFromAssignment*60)
+                        console.log('CURRENT tIME!!!', this.currentTime)
+                        console.log('FINAL CLOSEST PATROL!!!!', finalClosestPatrol);
+                        // assign closest patrol to job
+                        this.patrols[finalClosestPatrol.patrolId].onJob = true;
+                        this.patrols[finalClosestPatrol.patrolId].assignedJob = activeJob.jobId;
+                        this.patrols[finalClosestPatrol.patrolId].assignedJobLoc = activeJob.coordinates;
+                        console.log('ASSIGNED PATROL', this.patrols[finalClosestPatrol.patrolId])
+                        // update job as assigned with eta, patrolAssigned etc.
+                        const updateActiveJob = {...this.jobMap.get(activeJob.jobId)}
+                        updateActiveJob.patrolAssigned = true;
+                        const dateCopy = new Date(this.currentTime);
+                        updateActiveJob.assignmentTime = dateCopy;
+                        updateActiveJob.completionTime = completionTime;                                               
+                        updateActiveJob.eta = finalClosestPatrol.eta;
+                        updateActiveJob.etaWithTraffic = finalClosestPatrol.etaWithTraffic;
+                        updateActiveJob.patrolId = finalClosestPatrol.patrolId
+                        // console.log('!!!!! update active', updateActiveJob)
+                        this.jobMap.set(activeJob.jobId, updateActiveJob)
+                        const check = {...this.jobMap.get(activeJob.jobId)}
+                        // console.log('check', check)
                     })
-                }
-            })
-
-        
-
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        });
     }
 
+    completeJobsAndDeassignPatrols() {
+      this.jobMap.forEach((value, key) => {
+        const activeJob = {...this.jobMap.get(value.jobId)};
+        if (this.currentTime < activeJob.completionTime) {
+          console.log(`job: ${activeJob.jobId} completed`)
+          activeJob.jobCompleted = true;
+          this.jobMap.set(activeJob.jobId, activeJob)
+          this.patrols[activeJob.patrolId].onJob = false;
+          this.patrols[activeJob.patrolId].assignedJob = null;
+          this.patrols[activeJob.patrolId].assignedJobLoc = null;
+          this.patrols[activeJob.patrolId].currentLocation = activeJob.coordinates;
+          console.log('COMPLETED JOB:', this.jobMap.get(activeJob.jobId));
+          console.log('DE-ALLOCATED PATROL:', this.patrols[activeJob.patrolId]);         
+        }
+      })
+    }
+    //generate time for fix
+    rollForFixTimeInMinutes() {
+      const fixTime = Math.random() * (60 - 10) + 10;
+      return fixTime
+
+    }
+    //generate time for travel
+    rollForTravelTimeInMinutes(eta, etaWithTraffic) {
+      const travelTime = Math.random() * (etaWithTraffic - eta) + eta
+      return travelTime /60
+
+    }   
+    
     rollForNewJob() {
         console.log('!!!')
         const prob = (this.projectedJobCountForDuration/this.simDurationHours)/20;
@@ -99,6 +168,14 @@ class Simulation {
         if (roll < prob) {
             this.logNewBreakdown();
         } 
+    }
+
+    addSeconds(date, seconds) {
+      // Making a copy with the Date() constructor
+      const dateCopy = new Date(date);
+      dateCopy.setSeconds(date.getSeconds() + seconds);
+    
+      return dateCopy;
     }
 
   
@@ -110,6 +187,7 @@ class Simulation {
         const seconds = this.currentTime.getSeconds().toString().padStart(2, '0');
         await this.rollForNewJob()
         await this.assignFreePatrolsToQueued();
+        this.completeJobsAndDeassignPatrols();
         console.log(`Iteration: ${this.iteration}, Time: ${hours}:${minutes}:${seconds}`);
   
         // Increment iteration and time
@@ -130,25 +208,11 @@ class Simulation {
   }
 
 
-  class LogSystem{
-
-    constructor() {
-        this.jobQueue = [];
-    }
-
-    newJobToQueue(job) {
-        this.jobQueue.push(job)
-    }
-
-    removeJobFromQueue() {
-
-    }
-  }
+  
   
   // run sim
   const simulation = new Simulation();
   simulation.initializePatrols();
-//   simulation.rollForNewJob();
   simulation.startSimulation();
   
 
