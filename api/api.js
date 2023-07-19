@@ -30,9 +30,8 @@ function getLatandLongByQuery(address, postCode) {
       // axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=routeSummariesOnly&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
       axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=excludeItinerary,routePath&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
         .then((response) => {
-          // console.log('!!!!!response.data.resourceSets[0].resources[0].routeLegs', response.data.resourceSets[0].resources[0].routeLegs[0].routeSubLegs)
-          // console.log('!!!!!response.data.resourceSets[0].resources[0].routePath!!!![0]', response.data.resourceSets[0].resources[0].routePath.line.coordinates[0].length)
           
+          const resObj = response.data.resourceSets[0].resources[0];
         //DISTANCE IN MILES ETA IN SECONDS
           const result = {
             'distance': resObj.travelDistance,
@@ -50,7 +49,7 @@ function getLatandLongByQuery(address, postCode) {
   }
   
   function checkValidMainlandLocation(lat, long) {
-
+    console.log('!!!!!!process env', process.env.BING_MAPS_API_KEY)
     const latLong = `${lat},${long}`
     const apiKey = process.env.BING_MAPS_API_KEY;
   
