@@ -8,6 +8,11 @@ class Patrol {
         this.spawnLocation = this.generateRandomPointWithinBounds()
         this.currentLocation = null;
         this.spawnLocationDetails = null;
+        this.routePath = null;
+        this.travelTimeActualMins = null;
+        this.routeInterval = null;
+        this.assignedSimIteration = null
+        this.currentRouteIndex = 0
     }
 
     generateRandomPointWithinBounds() {

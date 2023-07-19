@@ -28,6 +28,7 @@ class Simulation {
             const patrolId = `patrol${i}`
             const newPatrol = new Patrol(patrolId)
             this.patrols[patrolId] = newPatrol
+            
         }
     }
 
@@ -78,6 +79,7 @@ class Simulation {
                                 distance: Number(resObj.distance), // Convert distance to a number
                                 eta: resObj.eta,
                                 etaWithTraffic: resObj.etaWithTraffic,
+                                routePath: resObj.routePath
                             }))
                             .catch((error) => {
                                 console.log(error);
@@ -109,16 +111,22 @@ class Simulation {
                         this.patrols[finalClosestPatrol.patrolId].onJob = true;
                         this.patrols[finalClosestPatrol.patrolId].assignedJob = activeJob.jobId;
                         this.patrols[finalClosestPatrol.patrolId].assignedJobLoc = activeJob.coordinates;
+                        this.patrols[finalClosestPatrol.patrolId].routePath = finalClosestPatrol.routePath;
+                        this.patrols[finalClosestPatrol.patrolId].travelTimeActualMins = travelTimeMins;
+                        this.patrols[finalClosestPatrol.patrolId].routeInterval = this.getRouteInterval(travelTimeMins, finalClosestPatrol.routePath.length);
+                        this.patrols[finalClosestPatrol.patrolId].assignedSimIteration = this.iteration;
+                        
                         console.log('ASSIGNED PATROL', this.patrols[finalClosestPatrol.patrolId])
                         // update job as assigned with eta, patrolAssigned etc.
                         const updateActiveJob = {...this.jobMap.get(activeJob.jobId)}
                         updateActiveJob.patrolAssigned = true;
                         const dateCopy = new Date(this.currentTime);
                         updateActiveJob.assignmentTime = dateCopy;
+                        updateActiveJob.travelTimeActual = travelTimeMins;
                         updateActiveJob.completionTime = completionTime;                                               
                         updateActiveJob.eta = finalClosestPatrol.eta;
                         updateActiveJob.etaWithTraffic = finalClosestPatrol.etaWithTraffic;
-                        updateActiveJob.patrolId = finalClosestPatrol.patrolId
+                        updateActiveJob.patrolId = finalClosestPatrol.patrolId;
                         // console.log('!!!!! update active', updateActiveJob)
                         this.jobMap.set(activeJob.jobId, updateActiveJob)
                         const check = {...this.jobMap.get(activeJob.jobId)}
@@ -142,10 +150,20 @@ class Simulation {
           this.patrols[activeJob.patrolId].assignedJob = null;
           this.patrols[activeJob.patrolId].assignedJobLoc = null;
           this.patrols[activeJob.patrolId].currentLocation = activeJob.coordinates;
-          console.log('COMPLETED JOB:', this.jobMap.get(activeJob.jobId));
+          // console.log('COMPLETED JOB:', this.jobMap.get(activeJob.jobId));
+          console.log('COMPLETED JOB:', activeJob.jobId);
           console.log('DE-ALLOCATED PATROL:', this.patrols[activeJob.patrolId]);         
+          console.log('DE-ALLOCATED PATROL:', activeJob.patrolId);         
         }
       })
+    }
+    updateActivePatrolsLocation() {
+      for (const patrol in this.patrols) {
+        if (patrol.onJob && this.iteration > patrol.assignedSimIteration) {
+          patrol.currentRouteIndex += patrol.routeInterval;
+          patrol.currentLocation = patrol.routePath[patrol.currentRouteIndex];
+        }
+      }
     }
     //generate time for fix
     rollForFixTimeInMinutes() {
@@ -169,7 +187,12 @@ class Simulation {
             this.logNewBreakdown();
         } 
     }
+    getRouteInterval(travelTimeActualMins, routePathArrLength) {
+      const intervalMins = travelTimeActualMins / 5;
+      const arrInterval = Math.floor(routePathArrLength / intervalMins)
+      return arrInterval;
 
+    }
     addSeconds(date, seconds) {
       // Making a copy with the Date() constructor
       const dateCopy = new Date(date);
