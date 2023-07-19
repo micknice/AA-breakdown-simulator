@@ -27,14 +27,18 @@ function getLatandLongByQuery(address, postCode) {
     const apiKey = process.env.BING_MAPS_API_KEY;
   
     return new Promise((resolve, reject) => {
-      axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=routeSummariesOnly&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
+      // axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=routeSummariesOnly&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
+      axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=excludeItinerary,routePath&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
         .then((response) => {
-          const resObj = response.data.resourceSets[0].resources[0];
+          // console.log('!!!!!response.data.resourceSets[0].resources[0].routeLegs', response.data.resourceSets[0].resources[0].routeLegs[0].routeSubLegs)
+          // console.log('!!!!!response.data.resourceSets[0].resources[0].routePath!!!![0]', response.data.resourceSets[0].resources[0].routePath.line.coordinates[0].length)
+          
         //DISTANCE IN MILES ETA IN SECONDS
           const result = {
             'distance': resObj.travelDistance,
             'eta': resObj.travelDuration,
-            'etaWithTraffic': resObj.travelDurationTraffic
+            'etaWithTraffic': resObj.travelDurationTraffic,
+            'routePath': resObj.routePath.line.coordinates
           };
           resolve(result);
         })
@@ -44,31 +48,9 @@ function getLatandLongByQuery(address, postCode) {
         });
     });
   }
-  // function getDistanceAndTime(jobLoc, patrolLoc) {
-  //   console.log('get distance invoked!!!!!!!');
-  //   console.log('api args!!!!!', jobLoc, patrolLoc)
   
-  //   return new Promise((resolve, reject) => {
-  //     axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=routeSummariesOnly&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
-  //       .then((response) => {
-  //         const resObj = response.data.resourceSets[0].resources[0];
-  //       //   console.log('distance @ api', response.data.resourceSets[0].resources[0]);
-  //       //DISTANCE IN MILES ETA IN SECONDS
-  //         const result = {
-  //           'distance': resObj.travelDistance,
-  //           'eta': resObj.travelDuration,
-  //           'etaWithTraffic': resObj.travelDurationTraffic
-  //         };
-  //         resolve(result);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error, 'error');
-  //         reject(error);
-  //       });
-  //   });
-  // }
   function checkValidMainlandLocation(lat, long) {
-    console.log('!!!!!!process env', process.env.BING_MAPS_API_KEY)
+
     const latLong = `${lat},${long}`
     const apiKey = process.env.BING_MAPS_API_KEY;
   
