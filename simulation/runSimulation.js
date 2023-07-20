@@ -32,12 +32,26 @@ class Simulation {
         }
     }
 
+    getPatrolCoordsForGUI() {
+      
+      const patrolData = [];
+
+      for (const patrolId in this.patrols) {
+        const patrol = this.patrols[patrolId];
+        console.log(patrol.currentLocation)
+        patrolData.push({
+          latitude: patrol.currentLocation[0],
+          longitude: patrol.currentLocation[1],          
+        });
+      }
+      return patrolData;
+    }
     getPatrolDataForGUI() {
       const patrolData = {};
 
       for (const patrolId in this.patrols) {
         const patrol = this.patrols[patrolId];
-        extractedPatrols[patrolId] = {
+        patrolData[patrolId] = {
           patrolId: patrol.patrolId,
           onJob: patrol.onJob,
           assignedJob: patrol.assignedJob,

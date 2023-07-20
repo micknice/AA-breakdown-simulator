@@ -10,10 +10,14 @@ const simulation = new Simulation();
 simulation.initializePatrols();
 
 simulation.startSimulation();
-simulation.interval = setInterval(() => {
 
-  io.emit('patrolData', simulation.getPatrolDataForGUI());
-}, 5000);
+
+    setInterval(() => {
+        console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
+        // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
+        io.emit('patrolData', simulation.getPatrolDataForGUI());
+      }, 5000);
+
 
 app.get('/socket.io/socket.io.js', (req, res) => {
   res.sendFile(__dirname + '/node_modules/socket.io-client/dist/socket.io.js');
