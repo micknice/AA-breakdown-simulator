@@ -1,19 +1,25 @@
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 7071 });
+const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
+const Simulation = require('../simulation/runSimulation');
+const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {cors: {origin: "*"}});
 
-const clients = new Map();
+const simulation = new Simulation();
+simulation.initializePatrols();
 
-wss.on('connection', (ws) => {
-    console.log('WEB SOCKET CONNECTED')
+simulation.startSimulation();
+simulation.interval = setInterval(() => {
 
-    ws.send(JSON.stringify({ type: 'patrols', data: simulation.patrols }));
+  io.emit('patrolData', simulation.getPatrolDataForGUI());
+}, 5000);
 
-    ws.on('message', message => {
-        ws.send(`outgoing, ${message}`)
+app.get('/socket.io/socket.io.js', (req, res) => {
+  res.sendFile(__dirname + '/node_modules/socket.io-client/dist/socket.io.js');
+});
 
-    });
-    
-})
-
-
-module.exports = wss;
+const port = 7071; 
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
