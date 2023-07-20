@@ -1,13 +1,19 @@
 const WebSocket = require('ws');
-const server = new WebSocket.Server({ port: 7071 });
+const wss = new WebSocket.Server({ port: 7071 });
 
 const clients = new Map();
 
-server.on('connection', (socket) => {
+wss.on('connection', (ws) => {
+    console.log('WEB SOCKET CONNECTED')
 
-    socket.on('message', message => {
-        socket.send(`outgoing, ${message}`)
+    ws.send(JSON.stringify({ type: 'patrols', data: simulation.patrols }));
+
+    ws.on('message', message => {
+        ws.send(`outgoing, ${message}`)
 
     });
     
 })
+
+
+module.exports = wss;

@@ -3,6 +3,7 @@ const Breakdown = require('./classes/breakdown')
 const IterationSummary = require('./reports/summary')
 const {getMemberDetailsById} = require('../db/model')
 const {getLatandLongByQuery, getDistanceAndTime} = require('../api/api')
+const wss = require('../broadcast/server')
 
 class Simulation {
     constructor(simDurationHours= 24, patrolCount=17, jobsPer24 = 300) {
@@ -208,6 +209,15 @@ class Simulation {
       }
       return count;
     }
+
+    sendWebSocketUpdate() {
+      const patrolsData = JSON.stringify({ type: 'patrols', data: this.patrols });
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(patrolsData);
+        }
+      });
+    }
  
     startSimulation() {
       this.interval = setInterval(async () => {
@@ -225,6 +235,7 @@ class Simulation {
         // Increment iteration and time
         this.iteration++;
         this.currentTime.setTime(this.currentTime.getTime() + this.iterationDuration);
+        this.sendWebSocketUpdate
   
         // Check if the simulation is complete
         if (this.iteration > this.numIterations) {
