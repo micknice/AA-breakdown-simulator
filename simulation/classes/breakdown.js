@@ -7,8 +7,6 @@ class Breakdown {
         this.address = member.address;
         this.postCode = member.postcode ; 
         this.coordinates = coordinates;
-        // Date here might be a problem
-        // this.date = new Date();
         this.logTime = logTime;
         this.patrolAssigned = false;
         this.patrolId = null;
