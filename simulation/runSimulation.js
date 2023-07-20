@@ -235,7 +235,7 @@ class Simulation {
         // Increment iteration and time
         this.iteration++;
         this.currentTime.setTime(this.currentTime.getTime() + this.iterationDuration);
-        this.sendWebSocketUpdate
+        this.sendWebSocketUpdate();
   
         // Check if the simulation is complete
         if (this.iteration > this.numIterations) {
