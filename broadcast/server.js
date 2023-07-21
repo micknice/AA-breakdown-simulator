@@ -13,7 +13,7 @@ simulation.startSimulation();
 
 
     setInterval(() => {
-        console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
+        // console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
         // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
         io.emit('patrolData', simulation.getPatrolDataForGUI());
       }, 5000);

@@ -50,7 +50,9 @@ class Simulation {
       const patrolData = {};
 
       for (const patrolId in this.patrols) {
+
         const patrol = this.patrols[patrolId];
+        console.log(patrol)
         patrolData[patrolId] = {
           patrolId: patrol.patrolId,
           onJob: patrol.onJob,
@@ -173,6 +175,10 @@ class Simulation {
           this.jobMap.delete(value.jobId)
         }
       })
+    }
+
+    skipOneIndexIfCurrentUndefined() {
+      
     }
     
     updateActivePatrolsLocation() {

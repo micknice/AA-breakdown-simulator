@@ -1,4 +1,5 @@
 const {checkValidMainlandLocation} = require('../../api/api')
+const fs = require('fs')
 class Patrol {
     constructor(patrolId,  onJob=false) {
         this.patrolId = patrolId;
@@ -13,6 +14,7 @@ class Patrol {
         this.routeInterval = null;
         this.assignedSimIteration = null
         this.currentRouteIndex = 0
+        
     }
 
     generateRandomPointWithinBounds() {
@@ -34,11 +36,29 @@ class Patrol {
                 this.currentLocation = [resArr[0].latitude, resArr[0].longitude]
                 // console.log('!!!current', this.currentLocation)
                 // this.spawnLocation = [resArr[0].latitude, resArr[0].longitude]
+                this.logLocData();
                 return [resArr[0].latitude, resArr[0].longitude];
             }
 
         })
       }
+
+    logLocData() {
+        const jsonData = {
+            patrolId: this.patrolId,
+            spawnLocationDetails: this.spawnLocationDetails,
+            currentLoc: this.currentLocation
+          };
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          const filePath = `../logs/${this.patrolId}.json`;
+          fs.writeFile(filePath, jsonString, (err) => {
+            if (err) {
+              console.error('Error writing JSON file:', err);
+            } else {
+              console.log('JSON data has been written to the file successfully.');
+            }
+          });
+    }
     updateLocation(newCoords) {
         this.currentLocation = newCoords
     }
