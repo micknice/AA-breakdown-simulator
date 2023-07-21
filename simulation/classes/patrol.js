@@ -54,7 +54,7 @@ class Patrol {
             currentLoc: this.currentLocation
           };
           const jsonString = JSON.stringify(jsonData, null, 2);
-          const filePath = `../logs/${this.patrolId}.json`;
+          const filePath = `./logs/${this.patrolId}.json`;
           fs.writeFile(filePath, jsonString, (err) => {
             if (err) {
               console.error('Error writing JSON file:', err);
