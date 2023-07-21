@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol16",
+  "spawnLocationDetails": {
+    "latitude": 53.693233,
+    "longitude": -0.5869698,
+    "addressLine": "Waterside House Water Side",
+    "locality": "Scunthorpe",
+    "neighborhood": "",
+    "adminDivision": "England",
+    "adminDivision2": "North Lincolnshire",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "DN15 9PE",
+    "formattedAddress": "Waterside House Water Side, DN15 9PE, England, United Kingdom"
+  },
+  "currentLoc": [
+    53.693233,
+    -0.5869698
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol19",
+  "spawnLocationDetails": {
+    "latitude": 56.75239944458008,
+    "longitude": -3.234741687774658,
+    "addressLine": "",
+    "locality": "Blairgowrie",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Angus",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "PH11 8",
+    "formattedAddress": "PH11 8, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    56.75239944458008,
+    -3.234741687774658
+  ]
+}

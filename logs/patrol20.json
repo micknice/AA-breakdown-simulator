@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol20",
+  "spawnLocationDetails": {
+    "latitude": 57.54042053222656,
+    "longitude": -5.32216215133667,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Highland",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "IV22 2ES",
+    "formattedAddress": "IV22 2ES, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    57.54042053222656,
+    -5.32216215133667
+  ]
+}

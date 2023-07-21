@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol13",
+  "spawnLocationDetails": {
+    "latitude": 52.001579287141,
+    "longitude": -4.85575959974263,
+    "addressLine": "Ffordd Bedd Morris",
+    "locality": "Newport",
+    "neighborhood": "",
+    "adminDivision": "Wales",
+    "adminDivision2": "Pembrokeshire",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "SA42 0QY",
+    "formattedAddress": "Ffordd Bedd Morris, SA42 0QY, Wales, United Kingdom"
+  },
+  "currentLoc": [
+    52.001579287141,
+    -4.85575959974263
+  ]
+}

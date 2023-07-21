@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol14",
+  "spawnLocationDetails": {
+    "latitude": 52.9300902,
+    "longitude": -1.0837241,
+    "addressLine": "Unit 4 Bassingfield Lane",
+    "locality": "Radcliffe on Trent",
+    "neighborhood": "",
+    "adminDivision": "England",
+    "adminDivision2": "Notts",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "NG12 2LG",
+    "formattedAddress": "Unit 4 Bassingfield Lane, NG12 2LG, England, United Kingdom"
+  },
+  "currentLoc": [
+    52.9300902,
+    -1.0837241
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol23",
+  "spawnLocationDetails": {
+    "latitude": 56.850555419921875,
+    "longitude": -3.7536861896514893,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Perth and Kinross",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "PH18 5",
+    "formattedAddress": "PH18 5, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    56.850555419921875,
+    -3.7536861896514893
+  ]
+}

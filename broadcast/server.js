@@ -6,13 +6,15 @@ const Simulation = require('../simulation/runSimulation');
 const server = http.createServer();
 const io = socketIO(server, {cors: {origin: "*"}});
 
-const simulation = new Simulation();
 // io.on('', (socket) => {
   //   console.log('START SIMULATION!!!!!')
   // })
   io.on('connection', (socket) => {
     console.log('connected')
-    socket.on('sim', (msg) => {
+    socket.on('sim', (patrolCount) => {
+
+      const simulation = new Simulation(24, patrolCount);
+
       console.log('START SIM TRIGGERED')
       simulation.initializePatrols();
       simulation.startSimulation();
