@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol5",
+  "spawnLocationDetails": {
+    "latitude": 51.1655514,
+    "longitude": 0.4935241,
+    "addressLine": "Poulters Hall Plain Road",
+    "locality": "Tonbridge",
+    "neighborhood": "",
+    "adminDivision": "England",
+    "adminDivision2": "Kent",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "TN12 9LS",
+    "formattedAddress": "Poulters Hall Plain Road, TN12 9LS, England, United Kingdom"
+  },
+  "currentLoc": [
+    51.1655514,
+    0.4935241
+  ]
+}

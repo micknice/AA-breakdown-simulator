@@ -3,6 +3,7 @@ const Breakdown = require('./classes/breakdown')
 const IterationSummary = require('./reports/summary')
 const {getMemberDetailsById} = require('../db/model')
 const {getLatandLongByQuery, getDistanceAndTime} = require('../api/api')
+const fs = require('fs')
 
 class Simulation {
     constructor(simDurationHours= 24, patrolCount=17, jobsPer24 = 300) {
@@ -38,7 +39,7 @@ class Simulation {
 
       for (const patrolId in this.patrols) {
         const patrol = this.patrols[patrolId];
-        console.log(patrol.currentLocation)
+        // console.log(patrol.currentLocation)
         patrolData.push({
           latitude: patrol.currentLocation[0],
           longitude: patrol.currentLocation[1],          
@@ -52,7 +53,7 @@ class Simulation {
       for (const patrolId in this.patrols) {
 
         const patrol = this.patrols[patrolId];
-        console.log(patrol)
+        // console.log(patrol)
         patrolData[patrolId] = {
           patrolId: patrol.patrolId,
           onJob: patrol.onJob,
@@ -141,6 +142,7 @@ class Simulation {
                           this.patrols[finalClosestPatrol.patrolId].routeInterval = this.getRouteInterval(travelTimeMins, finalClosestPatrol.routePath.length);
                           this.patrols[finalClosestPatrol.patrolId].assignedSimIteration = this.iteration;
                           
+                          this.logAssignedJobToJson(finalClosestPatrol, activeJob, this.getRouteInterval(travelTimeMins, finalClosestPatrol.routePath.length), travelTimeMins)
                           // update job as assigned with eta, patrolAssigned etc.
                           const updateActiveJob = {...this.jobMap.get(activeJob.jobId)}
                           updateActiveJob.patrolAssigned = true;
@@ -161,6 +163,48 @@ class Simulation {
         });
     }
 
+    logAssignedJobToJson(finalClosestPatrol, activeJob, routeInterval) {
+      const filePath = `../logs/${finalClosestPatrol.patrolId}.json`;
+      try {
+        const jsonString = fs.readFileSync(filePath, 'utf8');
+        const jsonObj = JSON.parse(jsonString);
+        if (jsonObj.hasOwnProperty('assignedJobs')) {
+          const keysArr = Object.keys(jsonObj.assignedJobs)
+          const jobLogNum = `job${keysArr.length +1}`;
+          jsonObj.assignedJobs[jobLogNum] = {};
+          jsonObj.assignedJobs[jobLogNum].jobId = activeJob.jobId;
+          jsonObj.assignedJobs[jobLogNum].assignedJobLoc = activeJob.coordinates;
+          jsonObj.assignedJobs[jobLogNum].routePath = finalClosestPatrol.routePath;
+          jsonObj.assignedJobs[jobLogNum].routeInterval = routeInterval
+          jsonObj.assignedJobs[jobLogNum].assignedSimIteration = this.iteration;
+          
+        } else {
+          const jobLogNum = 'job1';
+          jsonObj.assignedJobs = {};
+          jsonObj.assignedJobs[jobLogNum] = {};
+          jsonObj.assignedJobs[jobLogNum].jobId = activeJob.jobId;
+          jsonObj.assignedJobs[jobLogNum].assignedJobLoc = activeJob.coordinates;
+          jsonObj.assignedJobs[jobLogNum].routePath = finalClosestPatrol.routePath;
+          jsonObj.assignedJobs[jobLogNum].routeInterval = routeInterval
+          jsonObj.assignedJobs[jobLogNum].assignedSimIteration = this.iteration;
+
+        }
+        const jsonWriteString = JSON.stringify(jsonObj, null, 2);
+        fs.writeFile(filePath, jsonWriteString, (err) => {
+          if (err) {
+            console.error('Error writing JSON file:', err);
+          } else {
+            console.log('JSON data has been written to the file successfully.');
+          }
+        });
+
+
+      } catch (err) {
+        console.log('error logging assigned job to json', err.message)
+      }
+
+    }
+
     completeJobsAndDeassignPatrols() {
       this.jobMap.forEach((value, key) => {
         const activeJob = {...this.jobMap.get(value.jobId)};
@@ -178,7 +222,7 @@ class Simulation {
     }
 
     skipOneIndexIfCurrentUndefined() {
-      
+
     }
     
     updateActivePatrolsLocation() {
@@ -186,6 +230,7 @@ class Simulation {
       for (const patrol in this.patrols) {
         if (this.patrols[patrol].onJob && this.iteration > this.patrols[patrol].assignedSimIteration) {
           this.patrols[patrol].currentRouteIndex += this.patrols[patrol].routeInterval;
+          console.log(this.patrols[patrol].currentRouteIndex)
           this.patrols[patrol].currentLocation = this.patrols[patrol].routePath[this.patrols[patrol].currentRouteIndex];
         }
       }

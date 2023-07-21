@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol14",
+  "spawnLocationDetails": {
+    "latitude": 55.724525451660156,
+    "longitude": -2.8800508975982666,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Scottish Borders",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "TD1 2RX",
+    "formattedAddress": "TD1 2RX, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    55.724525451660156,
+    -2.8800508975982666
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol16",
+  "spawnLocationDetails": {
+    "latitude": 53.05144500732422,
+    "longitude": -4.176212310791016,
+    "addressLine": "",
+    "locality": "Caernarfon",
+    "neighborhood": "",
+    "adminDivision": "Wales",
+    "adminDivision2": "Gwynedd",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "LL54 6BT",
+    "formattedAddress": "LL54 6BT, Wales, United Kingdom"
+  },
+  "currentLoc": [
+    53.05144500732422,
+    -4.176212310791016
+  ]
+}

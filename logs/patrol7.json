@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol7",
+  "spawnLocationDetails": {
+    "latitude": 51.9119873046875,
+    "longitude": -4.5825886726379395,
+    "addressLine": "",
+    "locality": "Whitland",
+    "neighborhood": "",
+    "adminDivision": "Wales",
+    "adminDivision2": "Carmarthenshire",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "SA34 0JE",
+    "formattedAddress": "SA34 0JE, Wales, United Kingdom"
+  },
+  "currentLoc": [
+    51.9119873046875,
+    -4.5825886726379395
+  ]
+}

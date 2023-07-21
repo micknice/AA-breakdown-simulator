@@ -30,14 +30,19 @@ class Patrol {
                 console.log('invalid spawn loc- RE-ROLLING!!!')
                 this.generateRandomPointWithinBounds();
             } else {
-                console.log('SPAWN LOC VALID!!')
-                this.spawnLocationDetails = resArr[0];
-                // console.log('resArr[0]', this.spawnLocationDetails)
-                this.currentLocation = [resArr[0].latitude, resArr[0].longitude]
-                // console.log('!!!current', this.currentLocation)
-                // this.spawnLocation = [resArr[0].latitude, resArr[0].longitude]
-                this.logLocData();
-                return [resArr[0].latitude, resArr[0].longitude];
+                if (resArr[0].countryIso2 !== "GB") {
+                    console.log('invalid spawn loc- RE-ROLLING!!!')
+                    this.generateRandomPointWithinBounds();                   
+                } else {
+                    console.log('SPAWN LOC VALID!!')
+                    this.spawnLocationDetails = resArr[0];
+                    // console.log('resArr[0]', this.spawnLocationDetails)
+                    this.currentLocation = [resArr[0].latitude, resArr[0].longitude]
+                    // console.log('!!!current', this.currentLocation)
+                    // this.spawnLocation = [resArr[0].latitude, resArr[0].longitude]
+                    this.logLocData();
+                    return [resArr[0].latitude, resArr[0].longitude];
+                }
             }
 
         })

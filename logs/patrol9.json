@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol9",
+  "spawnLocationDetails": {
+    "latitude": 56.03385925292969,
+    "longitude": -2.688401460647583,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "East Lothian",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "",
+    "formattedAddress": "Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    56.03385925292969,
+    -2.688401460647583
+  ]
+}

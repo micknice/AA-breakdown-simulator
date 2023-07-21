@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol2",
+  "spawnLocationDetails": {
+    "latitude": 51.7224247,
+    "longitude": -0.3045025,
+    "addressLine": "31 Shenley Lane",
+    "locality": "London Colney",
+    "neighborhood": "",
+    "adminDivision": "England",
+    "adminDivision2": "Herts",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "AL2 1LW",
+    "formattedAddress": "31 Shenley Lane, AL2 1LW, England, United Kingdom"
+  },
+  "currentLoc": [
+    51.7224247,
+    -0.3045025
+  ]
+}

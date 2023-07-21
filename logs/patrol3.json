@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol3",
+  "spawnLocationDetails": {
+    "latitude": 57.05143737792969,
+    "longitude": -2.3927114009857178,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Aberdeenshire",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "",
+    "formattedAddress": "Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    57.05143737792969,
+    -2.3927114009857178
+  ]
+}

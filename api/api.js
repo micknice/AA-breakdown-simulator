@@ -23,10 +23,13 @@ function getLatandLongByQuery(address, postCode) {
   function getDistanceAndTime(jobLoc, patrolLoc) {
     const apiKey = process.env.BING_MAPS_API_KEY;
     return new Promise((resolve, reject) => {
-      axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${jobLoc}&wayPoint.2=${patrolLoc}&optimize=time&routeAttributes=excludeItinerary,routePath&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
+      axios.get(`http://dev.virtualearth.net/REST/v1/Routes?wayPoint.1=${patrolLoc}&wayPoint.2=${jobLoc}&optimize=time&routeAttributes=excludeItinerary,routePath&maxSolutions=1&distanceUnit=Mile&key=${apiKey}`)
         .then((response) => {
           const resObj = response.data.resourceSets[0].resources[0];
         //DISTANCE IN MILES ETA IN SECONDS
+
+
+
           const result = {
             'distance': resObj.travelDistance,
             'eta': resObj.travelDuration,
