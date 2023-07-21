@@ -9,7 +9,8 @@ get a bing maps api key.
 
 create a .env.dev file and paste this in there:
 
-PGDATABASE=breakdown_service BING_MAPS_API_KEY={YOUR BING MAPS API KEY}
+PGDATABASE=breakdown_service 
+BING_MAPS_API_KEY={YOUR BING MAPS API KEY}
 
 YOU WILL NEED POSTGRES INSTALLED!!!!
 
