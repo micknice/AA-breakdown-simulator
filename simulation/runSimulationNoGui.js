@@ -322,7 +322,10 @@ class Simulation {
 
   
   
- 
+  // run sim
+  const simulation = new Simulation();
+  simulation.initializePatrols();
+  simulation.startSimulation();
 
   module.exports = Simulation;
   

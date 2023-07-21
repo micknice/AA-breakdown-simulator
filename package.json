@@ -7,7 +7,8 @@
     "createDb": "psql -f ./db/setup.sql",
     "seedDb": "node ./db/seedScript.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sim": "node ./broadcast/server.js"
+    "sim": "node ./broadcast/server.js",
+    "simNoGui": "node ./simulation/runSimulationNoGui"
   },
   "author": "",
   "license": "ISC",

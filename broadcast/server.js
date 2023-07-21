@@ -7,16 +7,24 @@ const server = http.createServer();
 const io = socketIO(server, {cors: {origin: "*"}});
 
 const simulation = new Simulation();
-simulation.initializePatrols();
+// io.on('', (socket) => {
+  //   console.log('START SIMULATION!!!!!')
+  // })
+  io.on('connection', (socket) => {
+    console.log('connected')
+    socket.on('sim', (msg) => {
+      console.log('START SIM TRIGGERED')
+      simulation.initializePatrols();
+      simulation.startSimulation();
+      setInterval(() => {
+          // console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
+          // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
+          
+          io.emit('patrolData', simulation.getPatrolDataForGUI());
+        }, 5000);
+  })
+})
 
-simulation.startSimulation();
-
-
-    setInterval(() => {
-        // console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
-        // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
-        io.emit('patrolData', simulation.getPatrolDataForGUI());
-      }, 5000);
 
 
 const port = 7071; 
