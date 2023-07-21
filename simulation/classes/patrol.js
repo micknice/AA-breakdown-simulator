@@ -44,7 +44,6 @@ class Patrol {
                     return [resArr[0].latitude, resArr[0].longitude];
                 }
             }
-
         })
       }
 

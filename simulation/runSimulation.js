@@ -6,7 +6,7 @@ const {getLatandLongByQuery, getDistanceAndTime} = require('../api/api')
 const fs = require('fs')
 
 class Simulation {
-    constructor(simDurationHours= 24, patrolCount=17, jobsPer24 = 300) {
+    constructor(simDurationHours= 24, patrolCount=1, jobsPer24 = 300) {
         this.simDurationHours = simDurationHours;
         this.simulationDuration = simDurationHours * 60 * 60 * 1000; 
         this.iterationDuration = 5 * 60 * 1000; // 5 minutes reali-time equivalent iteration
@@ -100,6 +100,7 @@ class Simulation {
             if (value.patrolAssigned === false && value.jobCompleted === false) {         
                 const closestPatrolPromises = Object.entries(this.patrols).map(([patrolKey, patrolValue]) => {
                     if (patrolValue.onJob === false) {
+                      console.log('!!!!!',patrolValue.onJob)
                         const patrolLoc = `${patrolValue.currentLocation[0]},${patrolValue.currentLocation[1]}`;
                         return getDistanceAndTime(jobLoc, patrolLoc)
                             .then((resObj) => ({
@@ -221,16 +222,13 @@ class Simulation {
       })
     }
 
-    skipOneIndexIfCurrentUndefined() {
 
-    }
     
     updateActivePatrolsLocation() {
       console.log('UPDATING PATROL LOCATIONS')
       for (const patrol in this.patrols) {
         if (this.patrols[patrol].onJob && this.iteration > this.patrols[patrol].assignedSimIteration) {
           this.patrols[patrol].currentRouteIndex += this.patrols[patrol].routeInterval;
-          console.log(this.patrols[patrol].currentRouteIndex)
           this.patrols[patrol].currentLocation = this.patrols[patrol].routePath[this.patrols[patrol].currentRouteIndex];
         }
       }
