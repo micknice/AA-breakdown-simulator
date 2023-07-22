@@ -48,7 +48,8 @@ class Simulation {
       return patrolData;
     }
     getPatrolDataForGUI() {
-      const patrolData = {};
+      const patrolData = {
+      };
 
       for (const patrolId in this.patrols) {
 
@@ -60,6 +61,8 @@ class Simulation {
           assignedJob: patrol.assignedJob,
           assignedJobLoc: patrol.assignedJobLoc,
           currentLocation: patrol.currentLocation,
+          
+          
         };
       }
       return patrolData;
@@ -283,6 +286,19 @@ class Simulation {
         }
       }
       return count;
+    }
+
+    getIterationSummary() {
+      const iterationSummary = new IterationSummary(
+        this.iteration, 
+        this.currentTime, 
+        this.jobCount, 
+        this.completedJobMap.size, 
+        this.jobMap.size, 
+        this.getAssignedPatrols(), 
+        this.getUnassignedPatrols()
+        )
+        return iterationSummary
     }
 
     

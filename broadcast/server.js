@@ -23,6 +23,7 @@ const io = socketIO(server, {cors: {origin: "*"}});
           // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
           
           io.emit('patrolData', simulation.getPatrolDataForGUI());
+          io.emit('iterationSummary', simulation.getIterationSummary());
         }, 5000);
   })
 })
