@@ -11,21 +11,33 @@ const io = socketIO(server, {cors: {origin: "*"}});
   // })
   io.on('connection', (socket) => {
     console.log('connected')
-    socket.on('sim', (patrolCount) => {
+    let simulation; 
+    console.log('simulation var pre instance', simulation)
+    if (!simulation) {
+      simulation = new Simulation();
+    }
+    console.log('simulation var post instance', simulation)
+    socket.on('sim', (patrolCount, startStop) => {
 
-      const simulation = new Simulation(24, patrolCount);
-
+      // simulation.patrolCount = patrolCount
+      simulation.patrolCount = 1
+      
       console.log('START SIM TRIGGERED')
       simulation.initializePatrols();
       simulation.startSimulation();
       setInterval(() => {
-          // console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
-          // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
-          
-          io.emit('patrolData', simulation.getPatrolDataForGUI());
-          io.emit('iterationSummary', simulation.getIterationSummary());
-        }, 5000);
-  })
+        // console.log('patrolData@ socket out', simulation.getPatrolCoordsForGUI())
+        // io.emit('patrolData', simulation.getPatrolCoordsForGUI());
+        
+        io.emit('patrolData', simulation.getPatrolDataForGUI());
+        io.emit('iterationSummary', simulation.getIterationSummary());
+      }, 5000);
+    })
+    
+    socket.on('stopSim', () => {
+      simulation.stopSimulation();
+      console.log('stop sim recieved')
+    })
 })
 
 

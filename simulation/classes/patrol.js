@@ -57,9 +57,9 @@ class Patrol {
           const filePath = `./logs/${this.patrolId}.json`;
           fs.writeFile(filePath, jsonString, (err) => {
             if (err) {
-              console.error('Error writing JSON file:', err);
+              console.error('Error logging patrol loc data @ Patrol class:', err);
             } else {
-              console.log('JSON data has been written to the file successfully.');
+              console.log('patrol loc data logged @ Patrol Class');
             }
           });
     }
