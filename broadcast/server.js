@@ -19,8 +19,8 @@ const io = socketIO(server, {cors: {origin: "*"}});
     console.log('simulation var post instance', simulation)
     socket.on('sim', (patrolCount, startStop) => {
 
-      // simulation.patrolCount = patrolCount
-      simulation.patrolCount = 1
+      simulation.patrolCount = patrolCount
+      // simulation.patrolCount = 1
       
       console.log('START SIM TRIGGERED')
       simulation.initializePatrols();
