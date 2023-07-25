@@ -31,6 +31,7 @@ const io = socketIO(server, {cors: {origin: "*"}});
         
         io.emit('patrolData', simulation.getPatrolDataForGUI());
         io.emit('iterationSummary', simulation.getIterationSummary());
+        io.emit('activeJobLocs', simulation.getJobLocs());
       }, 5000);
     })
     

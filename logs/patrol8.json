@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol8",
+  "spawnLocationDetails": {
+    "latitude": 58.17817687988281,
+    "longitude": -4.227755069732666,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Highland",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "KW11 6",
+    "formattedAddress": "KW11 6, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    58.17817687988281,
+    -4.227755069732666
+  ]
+}

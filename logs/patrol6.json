@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol6",
+  "spawnLocationDetails": {
+    "latitude": 50.843788146972656,
+    "longitude": -4.1419572830200195,
+    "addressLine": "",
+    "locality": "Beaworthy",
+    "neighborhood": "",
+    "adminDivision": "England",
+    "adminDivision2": "Devon",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "EX21 5NP",
+    "formattedAddress": "EX21 5NP, England, United Kingdom"
+  },
+  "currentLoc": [
+    50.843788146972656,
+    -4.1419572830200195
+  ]
+}
