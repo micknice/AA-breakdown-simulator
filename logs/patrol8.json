@@ -1,20 +1,20 @@
 {
   "patrolId": "patrol8",
   "spawnLocationDetails": {
-    "latitude": 58.17817687988281,
-    "longitude": -4.227755069732666,
-    "addressLine": "",
-    "locality": "",
+    "latitude": 53.5751049779211,
+    "longitude": -2.53746221513632,
+    "addressLine": "De Havilland Way",
+    "locality": "Westhoughton",
     "neighborhood": "",
-    "adminDivision": "Scotland",
-    "adminDivision2": "Highland",
+    "adminDivision": "England",
+    "adminDivision2": "Greater Manchester",
     "countryIso2": "GB",
     "countryRegion": "United Kingdom",
-    "postalCode": "KW11 6",
-    "formattedAddress": "KW11 6, Scotland, United Kingdom"
+    "postalCode": "BL5 3LU",
+    "formattedAddress": "De Havilland Way, BL5 3LU, England, United Kingdom"
   },
   "currentLoc": [
-    58.17817687988281,
-    -4.227755069732666
+    53.5751049779211,
+    -2.53746221513632
   ]
 }

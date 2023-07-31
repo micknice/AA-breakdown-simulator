@@ -1,20 +1,20 @@
 {
   "patrolId": "patrol0",
   "spawnLocationDetails": {
-    "latitude": 55.0655403137207,
-    "longitude": -4.466777324676514,
+    "latitude": 50.50737762451172,
+    "longitude": -4.69508171081543,
     "addressLine": "",
-    "locality": "",
+    "locality": "Bodmin",
     "neighborhood": "",
-    "adminDivision": "Scotland",
-    "adminDivision2": "Dumfries and Galloway",
+    "adminDivision": "England",
+    "adminDivision2": "Cornwall",
     "countryIso2": "GB",
     "countryRegion": "United Kingdom",
-    "postalCode": "DG8 6",
-    "formattedAddress": "DG8 6, Scotland, United Kingdom"
+    "postalCode": "PL30 4QD",
+    "formattedAddress": "PL30 4QD, England, United Kingdom"
   },
   "currentLoc": [
-    55.0655403137207,
-    -4.466777324676514
+    50.50737762451172,
+    -4.69508171081543
   ]
 }

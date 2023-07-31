@@ -6,7 +6,7 @@ const {getLatandLongByQuery, getDistanceAndTime} = require('../api/api')
 const fs = require('fs')
 
 class Simulation {
-    constructor(simDurationHours= 12, patrolCount=17, jobsPer24 = 300) {
+    constructor(simDurationHours= 0.5, patrolCount=17, jobsPer24 = 300) {
         this.simDurationHours = simDurationHours;
         this.simulationDuration = simDurationHours * 60 * 60 * 1000; 
         this.iterationDuration = 5 * 60 * 1000; // 5 minutes reali-time equivalent iteration
@@ -508,6 +508,8 @@ class Simulation {
 
   
     stopSimulation() {
+      // console.log('patrolount @ stopSim', this.patrolCount)
+      console.log('iteration @ stopSim', this.iteration)
       console.log('!!!', this.interval)
       clearInterval(this.interval);
     }
