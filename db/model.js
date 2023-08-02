@@ -13,5 +13,15 @@ const getMemberDetailsById = (id) => {
     })
 }
 
+const getPatrolSpawnById = (id) => {
+    return db.query(
+        `SELECT * FROM patrol_spawns
+        WHERE address_id = $1`, [id]
+    )
+    .then(result => {
+        return result.rows[0]
+    })
+}
 
-module.exports = {getMemberDetailsById}
+
+module.exports = {getMemberDetailsById, getPatrolSpawnById}

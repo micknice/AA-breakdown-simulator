@@ -5,6 +5,7 @@ const seed = require('./seed');
 const db = require('./connection');
 const path = require('path');
 const csvParser = csvParse.parse;
+const {getLatandLongByQuery} = require('../api/api')
 
 function parseCSVFiles(directoryPath) {
     return new Promise((resolve, reject) => {
@@ -25,8 +26,8 @@ function parseCSVFiles(directoryPath) {
                 .pipe(csvParser({bom: true}))
                 .on('data', (data) => {
 
-                    console.log('!!!!', Object.keys(data))
-                    console.log('!!!!', data[0], data[1])
+                    // console.log('!!!!', Object.keys(data))
+                    // console.log('!!!!', data[0], data[1])
                     // console.log('!!!!', typeof(data.Postcode))
                   const formattedData = {
                     Address: data[0],
@@ -59,11 +60,23 @@ function parseCSVFiles(directoryPath) {
     });
   }
 
-  parseCSVFiles('../data')
-  .then((parsedDataArray) => {
+  parseCSVFiles('./data')
+  .then(async(parsedDataArray) => {
+    
     const flattenedDataArray = [].concat(...parsedDataArray);
-    return seed(flattenedDataArray);
+    // console.log(flattenedDataArray)
+    const dataArrayWithCoords = [];
+    for(customer of flattenedDataArray) {
+      const customerCopy = {...customer}
+      const coords = await getLatandLongByQuery(customer.Address, customer.Postcode)
+      customerCopy.latitude = coords[0]
+      customerCopy.longitude = coords[1]
+      dataArrayWithCoords.push(customerCopy)
+      console.log(coords)      
+    }
+    return seed(dataArrayWithCoords);
   })
+  
   .then(() => {
     db.end();
   })

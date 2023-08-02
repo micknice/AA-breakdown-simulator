@@ -1,29 +1,23 @@
 const format = require('pg-format');
 const db = require('./connection');
 
-const seed = (data) => {
+const seedPatrolSpawns = (data) => {
     console.log('!!££', data[0])
-    return db.query(`DROP TABLE IF EXISTS addresses;`)
+    return db.query(`DROP TABLE IF EXISTS patrol_spawns;`)
     .then(() => {
-        return db.query(`CREATE TABLE addresses (
+        return db.query(`CREATE TABLE patrol_spawns (
             address_id SERIAL PRIMARY KEY,
-            address VARCHAR,
-            postcode VARCHAR,
             latitude NUMERIC,
             longitude NUMERIC
             
         );`)
         .then(() => {
             const queryStr = format(
-                `INSERT INTO addresses (
-                    address,
-                    postcode,
+                `INSERT INTO patrol_spawns (
                     latitude,
                     longitude            
                 ) VALUES %L RETURNING *;`,
-            data.map(({Address, Postcode, latitude, longitude}) => [
-                Address, 
-                Postcode,
+            data.map(({latitude, longitude}) => [                
                 latitude,
                 longitude
                 ]) 
@@ -31,7 +25,7 @@ const seed = (data) => {
             return db.query(queryStr)
         })
         .then(() => {
-            return db.query(`SELECT * FROM addresses;`)
+            return db.query(`SELECT * FROM patrol_spawns;`)
             .then(result => {
                 const results = result.rows
                 console.log(results.length)
@@ -41,4 +35,4 @@ const seed = (data) => {
     
 }
 
-module.exports = seed;
+module.exports = seedPatrolSpawns;

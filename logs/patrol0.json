@@ -1,20 +1,20 @@
 {
   "patrolId": "patrol0",
   "spawnLocationDetails": {
-    "latitude": 50.50737762451172,
-    "longitude": -4.69508171081543,
-    "addressLine": "",
-    "locality": "Bodmin",
+    "latitude": 52.7765299,
+    "longitude": 1.0328743,
+    "addressLine": "The Old Gatehouse Green Lane",
+    "locality": "Dereham",
     "neighborhood": "",
     "adminDivision": "England",
-    "adminDivision2": "Cornwall",
+    "adminDivision2": "Norfolk",
     "countryIso2": "GB",
     "countryRegion": "United Kingdom",
-    "postalCode": "PL30 4QD",
-    "formattedAddress": "PL30 4QD, England, United Kingdom"
+    "postalCode": "NR20 5PN",
+    "formattedAddress": "The Old Gatehouse Green Lane, NR20 5PN, England, United Kingdom"
   },
   "currentLoc": [
-    50.50737762451172,
-    -4.69508171081543
+    52.7765299,
+    1.0328743
   ]
 }

@@ -7,7 +7,7 @@ require('dotenv').config({
 
 const config = 
   {
-    database: 'breakdown_service',
+    connectionString: 'postgres://breakdown_service_user:vOeFLz9KWnt91Z3G6mjqpVExvfqPaNto@dpg-cj453rp8g3nakvhrpbqg-a.frankfurt-postgres.render.com/breakdown_service?ssl=true',
     max: 2
 }
                         
