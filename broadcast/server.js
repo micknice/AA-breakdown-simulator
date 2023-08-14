@@ -1,7 +1,7 @@
 const http = require('http');
 const socketIO = require('socket.io');
 const Simulation = require('../simulation/runSimulation');
-const FastSimulation = require('../simulation/runSimulationFast')
+const FastSimulation = require('../simulation/runSimulationPreSpawned')
 
 const server = http.createServer();
 const io = socketIO(server, { cors: { origin: "*" } });
@@ -12,16 +12,18 @@ let intervalId;
 io.on('connection', (socket) => {
   console.log('connected');
 
-  socket.on('sim', (patrolCount, startStop) => {
+  socket.on('sim', async (patrolCount, startStop) => {
     console.log('simulation var pre instance', simulation);
     if (!simulation) {
-      simulation = new Simulation();
-      // simulation = new FastSimulation();
+      // simulation = new Simulation();
+      simulation = new FastSimulation();
     }
     console.log('simulation var post instance', simulation);
     simulation.patrolCount = patrolCount;
     console.log('START SIM TRIGGERED');
     simulation.initializePatrols();
+    
+    
     simulation.startSimulation();
 
     intervalId = setInterval(() => {

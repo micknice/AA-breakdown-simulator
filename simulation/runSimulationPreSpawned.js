@@ -22,45 +22,8 @@ class FastSimulation {
         this.jobMap = new Map();
         this.completedJobMap = new Map();
         this.stopNext = false;
-        this.iterationBreakdownMap = new Map();
-        this.uniqueMemberMap = new Map();
-        this.fastJobCount = 0;
         
     }
-
-    initializeBreakdowns() {
-      for(let i = 0; i <5; i++) {
-        const newJobBool = this.rollForJob()
-        if (newJobBool) {
-          console.log('newjob')
-          const newBreakdown = this.logNewFastBreakdown();
-          this.iterationBreakdownMap.set(i+1, newBreakdown)          
-        }
-      }
-      console.log('iterationBreakdownMap.size post initialization', this.iterationBreakdownMap.size)
-      
-
-    }
-    logNewFastBreakdown() {
-      const randomId = Math.floor(Math.random() * 1999);
-      console.log(`LOGGING NEW BREAKDOWN: mbr id: ${randomId}`);
-        
-        getMemberDetailsById(randomId)
-          .then(member => {
-            console.log('!!!!!!member', member)
-            if (this.uniqueMemberMap.has(randomId)) {
-              console.log(`Job in with memberID: ${randomId} - Re-rolling!!!`);
-              this.logNewBreakdown();
-            } else {
-              const coordinates = [parseFloat(member.latitude), parseFloat(member.longitude)]
-              const newBreakdown = new Breakdown(this.jobCount, member, coordinates, randomId, this.currentTime);
-              this.uniqueMemberMap.set(this.jobCount, newBreakdown);
-              const setJob = this.jobMap.get(this.fastJobCount);
-              this.fastJobCount += 1;
-              return newBreakdown;
-            }
-          });
-      }
 
     // random seeding of patrols
     initializePatrols() {
@@ -119,7 +82,26 @@ class FastSimulation {
       return patrolData;
     }
 
-    
+    async logNewBreakdown() {
+      const randomId = Math.floor(Math.random() * 1999);
+      console.log(`LOGGING NEW BREAKDOWN: mbr id: ${randomId}`);
+        
+        getMemberDetailsById(randomId)
+          .then(member => {
+            console.log('!!!!!!member', member)
+            if (this.jobMap.has(randomId)) {
+              console.log(`Job in with memberID: ${randomId} - Re-rolling!!!`);
+              this.logNewBreakdown();
+            } else {
+              const coordinates = [parseFloat(member.latitude), parseFloat(member.longitude)]
+              const newBreakdown = new Breakdown(this.jobCount, member, coordinates, randomId, this.currentTime);
+              this.jobMap.set(this.jobCount, newBreakdown);
+              const setJob = this.jobMap.get(this.jobCount);
+              this.jobCount += 1;
+                
+            }
+          });
+      }
       getAllJobsWithNoAssignedPatrol() {
         const unassignedJobsArr = []
         if (this.jobMap.size > 0) {
@@ -372,15 +354,6 @@ class FastSimulation {
             this.logNewBreakdown();
         } 
     }
-    rollForJob() {
-        const prob = (this.projectedJobCountForDuration/this.simDurationHours)/20;
-        const roll = Math.random();
-        if (roll < prob) {
-            return true;
-        } else {
-          return false;
-        }
-    }
     getRouteInterval(travelTimeActualMins, routePathArrLength) {
       const intervalMins = travelTimeActualMins / 5;
       const arrInterval = Math.floor(routePathArrLength / intervalMins)
@@ -477,4 +450,3 @@ class FastSimulation {
 
   module.exports = FastSimulation;
   
-

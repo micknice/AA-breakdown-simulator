@@ -4,6 +4,7 @@
   "description": "",
   "main": "breakdown.js",
   "scripts": {
+    "start": "node listen.js",
     "createDb": "psql -f ./db/setup.sql",
     "seedDb": "node ./db/seedScript.js",
     "seedPatrolSpawns": "node ./db/seedPatrolScript.js",
