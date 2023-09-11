@@ -28,9 +28,9 @@ for use with GUI:
 
 npm run sim
 
-If you want the GUI then get that here: https://github.com/micknice/Breakdown_GUI clone and npm install then run npm start 
+If you want the GUI then get that here: https://github.com/micknice/Breakdown_GUI clone and npm install then run npm start.
 
-there are currently still some bugs so you may occasionally see a patrol teleport across the map.
+
 
 
 

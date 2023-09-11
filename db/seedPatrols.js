@@ -28,7 +28,7 @@ const seedPatrolSpawns = (data) => {
             return db.query(`SELECT * FROM patrol_spawns;`)
             .then(result => {
                 const results = result.rows
-                console.log(results.length)
+                console.log('total seeded',results.length)
             })
         })
     })

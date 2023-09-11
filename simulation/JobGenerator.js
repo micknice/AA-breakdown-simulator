@@ -1,11 +1,11 @@
-const FastPatrol = require('./classes/fastPatrol')
+const Patrol = require('./classes/patrol')
 const Breakdown = require('./classes/breakdown')
 const IterationSummary = require('./reports/summary')
-const {getMemberDetailsById, getPatrolSpawnById} = require('../db/model')
+const {getMemberDetailsById} = require('../db/model')
 const {getLatandLongByQuery, getDistanceAndTime} = require('../api/api')
 const fs = require('fs')
 
-class FastSimulation {
+class JobGenerator {
     constructor(simDurationHours= 24, patrolCount=17, jobsPer24 = 300) {
         this.simDurationHours = simDurationHours;
         this.simulationDuration = simDurationHours * 60 * 60 * 1000; 
@@ -25,35 +25,19 @@ class FastSimulation {
         
     }
 
-    // random seeding of patrols
     initializePatrols() {
-      const spawnMap = new Map()
         for (let i = 0; i < this.patrolCount; i++) {
-          const randomId = (Math.floor(Math.random() * 900)) + 1;
-          getPatrolSpawnById(randomId)
-          .then(coords => {
-            console.log('!!!!!!!', coords)
-            const coordStr = `${coords.latitude}, ${coords.longitude}`
-            if (spawnMap.has(coordStr)){
-              getPatrolSpawnById(randomId)
-            } else {
-              spawnMap.set(coordStr, coords)
-              // +1 on patrol id for consistency but may change if buggy
-              const patrolId = `patrol${i}`
-              const newPatrol = new FastPatrol(patrolId, coords)
-              this.patrols[patrolId] = newPatrol                          
-            }
-          })
+            const patrolId = `patrol${i}`
+            const newPatrol = new Patrol(patrolId)
+            this.patrols[patrolId] = newPatrol            
         }
     }
 
     getPatrolCoordsForGUI() {
-      
       const patrolData = [];
 
       for (const patrolId in this.patrols) {
         const patrol = this.patrols[patrolId];
-        // console.log(patrol.currentLocation)
         patrolData.push({
           latitude: patrol.currentLocation[0],
           longitude: patrol.currentLocation[1],          
@@ -64,19 +48,14 @@ class FastSimulation {
     getPatrolDataForGUI() {
       const patrolData = {
       };
-
       for (const patrolId in this.patrols) {
-
         const patrol = this.patrols[patrolId];
-        // console.log(patrol)
         patrolData[patrolId] = {
           patrolId: patrol.patrolId,
           onJob: patrol.onJob,
           assignedJob: patrol.assignedJob,
           assignedJobLoc: patrol.assignedJobLoc,
           currentLocation: patrol.currentLocation,
-          
-          
         };
       }
       return patrolData;
@@ -88,17 +67,20 @@ class FastSimulation {
         
         getMemberDetailsById(randomId)
           .then(member => {
-            console.log('!!!!!!member', member)
             if (this.jobMap.has(randomId)) {
               console.log(`Job in with memberID: ${randomId} - Re-rolling!!!`);
               this.logNewBreakdown();
             } else {
-              const coordinates = [parseFloat(member.latitude), parseFloat(member.longitude)]
-              const newBreakdown = new Breakdown(this.jobCount, member, coordinates, randomId, this.currentTime);
-              this.jobMap.set(this.jobCount, newBreakdown);
-              const setJob = this.jobMap.get(this.jobCount);
-              this.jobCount += 1;
-                
+              getLatandLongByQuery(member.address, member.postcode)
+                .then(coordinates => {
+                  const newBreakdown = new Breakdown(this.jobCount, member, coordinates, randomId, this.currentTime);
+                  this.jobMap.set(this.jobCount, newBreakdown);
+                  const setJob = this.jobMap.get(this.jobCount);
+                  this.jobCount += 1;
+                })
+                .catch(error => {
+                  console.log(error);
+                });
             }
           });
       }
@@ -111,11 +93,7 @@ class FastSimulation {
             }
           })
         }
-        // if (unassignedJobsArr.length > 0) {
-        //   return Math.min(...unassignedJobsArr)
-        // } else {
-        //   return null;
-        // }
+
         return unassignedJobsArr;
       }
       getAllUnassignedPatrols() {
@@ -132,14 +110,12 @@ class FastSimulation {
         const jobLocsArr = [];
         const values = this.jobMap.values()
         for (const x of values) {
-          // console.log('!!!!!!', x.coordinates)
           jobLocsArr.push(x.coordinates)
         }
-        // console.log(jobLocsArr)
         return jobLocsArr
       }
 
-    
+
       async assignFreePatrolsToQueued() {
         console.log('ASSIGNING PATROLS');
         // loop through jobs map and check for patrolAssigned
@@ -318,8 +294,6 @@ class FastSimulation {
         this.iteration > this.patrols[patrol].assignedSimIteration && 
         this.patrols[patrol].currentLocation[0] !== this.patrols[patrol].assignedJobLoc[0] && 
         this.patrols[patrol].currentLocation[1] !== this.patrols[patrol].assignedJobLoc[1]) {
-          
-
           if (this.patrols[patrol].currentRouteIndex + this.patrols[patrol].routeInterval < this.patrols[patrol].routePath.length) {
             this.patrols[patrol].currentRouteIndex += this.patrols[patrol].routeInterval;
             this.patrols[patrol].currentLocation = this.patrols[patrol].routePath[this.patrols[patrol].currentRouteIndex];
@@ -329,19 +303,15 @@ class FastSimulation {
             this.patrols[patrol].currentLocation = this.patrols[patrol].assignedJobLoc;
             this.logPingsToJson(this.patrols[patrol], this.patrols[patrol].currentLocation, this.patrols[patrol].currentRouteIndex, this.patrols[patrol].routePath.length);
           }
-
-
         }
       }
     }
 
-    //generate time for fix
     rollForFixTimeInMinutes() {
       const fixTime = Math.random() * (60 - 10) + 10;
       return fixTime
     }
 
-    //generate time for travel
     rollForTravelTimeInMinutes(eta, etaWithTraffic) {
       const travelTime = Math.random() * (etaWithTraffic - eta) + eta
       return travelTime /60
@@ -448,5 +418,6 @@ class FastSimulation {
   
  
 
-  module.exports = FastSimulation;
+  module.exports = Simulation;
   
+

@@ -24,8 +24,14 @@ class Simulation {
         this.stopNext = false;
         
     }
+    rollForNewJob() {
+      const prob = (this.projectedJobCountForDuration/this.simDurationHours)/20;
+      const roll = Math.random();
+      if (roll < prob) {
+          this.logNewBreakdown();
+      } 
+  }
 
-    // random seeding of patrols
     initializePatrols() {
         for (let i = 0; i < this.patrolCount; i++) {
             const patrolId = `patrol${i}`
@@ -35,12 +41,10 @@ class Simulation {
     }
 
     getPatrolCoordsForGUI() {
-      
       const patrolData = [];
 
       for (const patrolId in this.patrols) {
         const patrol = this.patrols[patrolId];
-        // console.log(patrol.currentLocation)
         patrolData.push({
           latitude: patrol.currentLocation[0],
           longitude: patrol.currentLocation[1],          
@@ -51,19 +55,14 @@ class Simulation {
     getPatrolDataForGUI() {
       const patrolData = {
       };
-
       for (const patrolId in this.patrols) {
-
         const patrol = this.patrols[patrolId];
-        // console.log(patrol)
         patrolData[patrolId] = {
           patrolId: patrol.patrolId,
           onJob: patrol.onJob,
           assignedJob: patrol.assignedJob,
           assignedJobLoc: patrol.assignedJobLoc,
           currentLocation: patrol.currentLocation,
-          
-          
         };
       }
       return patrolData;
@@ -101,11 +100,7 @@ class Simulation {
             }
           })
         }
-        // if (unassignedJobsArr.length > 0) {
-        //   return Math.min(...unassignedJobsArr)
-        // } else {
-        //   return null;
-        // }
+
         return unassignedJobsArr;
       }
       getAllUnassignedPatrols() {
@@ -122,101 +117,12 @@ class Simulation {
         const jobLocsArr = [];
         const values = this.jobMap.values()
         for (const x of values) {
-          // console.log('!!!!!!', x.coordinates)
           jobLocsArr.push(x.coordinates)
         }
-        // console.log(jobLocsArr)
         return jobLocsArr
       }
 
-    //   async assignFreePatrolsToQueued() {
-    //     const queuedJobsArr = this.getAllJobsWithNoAssignedPatrol();
-    //     const freePatrolsArr = this.getAllUnassignedPatrols();
-    //     if (queuedJobsArr.length === 0) {return;}
-    //     if (freePatrolsArr.length === 0) {return;}
-    //     const priorityJobId = Math.min(...queuedJobsArr);
-    //     console.log('PRIORITYJOBID!!!', priorityJobId)
-       
 
-    //     console.log('ASSIGNING PATROL');
-              
-    //         const activeJob = this.jobMap.get(priorityJobId)
-    //         console.log('ACTIVE JOB!!!!!', activeJob)
-    //         const jobLoc = activeJob.coordinates;     
-    //         // if no patrol assigned map through patrols, check if patrol currently assigned
-    //         // if not assigned then add to a list of Promises to get distance and estimated travel time from API
-    //         if (activeJob.patrolAssigned === false && activeJob.jobCompleted === false) {         
-    //             const closestPatrolPromises = Object.entries(this.patrols).map(([patrolKey, patrolValue]) => {
-    //                 if (patrolValue.onJob === false) {
-    //                   console.log('!!!!!',patrolValue.onJob)
-    //                     const patrolLoc = `${patrolValue.currentLocation[0]},${patrolValue.currentLocation[1]}`;
-    //                     console.log('patrolLoc', patrolLoc, "!!!!!!")
-    //                     console.log('jobLoc', jobLoc)
-    //                     return getDistanceAndTime(jobLoc, patrolLoc)
-    //                         .then((resObj) => ({
-    //                             patrolId: patrolValue.patrolId,
-    //                             distance: Number(resObj.distance), 
-    //                             eta: resObj.eta,
-    //                             etaWithTraffic: resObj.etaWithTraffic,
-    //                             routePath: resObj.routePath
-    //                         }))
-    //                         .catch((error) => {
-    //                             console.log(error);
-    //                             return null;
-    //                         });
-    //                 }
-    //                 return null;
-    //             });
-    //             // cash in promises
-    //             Promise.all(closestPatrolPromises)
-    //                 .then((closestPatrols) => {
-    //                     const filteredClosestPatrols = closestPatrols.filter((patrol) => patrol !== null);
-    //                     if(filteredClosestPatrols.length > 0) {
-    //                       // find the closest patrol
-    //                       let finalClosestPatrol = null;
-    //                       filteredClosestPatrols.forEach((patrol) => {
-    //                         console.log(patrol.patrolId)
-    //                           if (finalClosestPatrol === null || patrol.distance < finalClosestPatrol.distance) {
-    //                               finalClosestPatrol = patrol;
-    //                           }
-    //                       });
-    //                       const fixTimeMins = this.rollForFixTimeInMinutes()
-    //                       const travelTimeMins = this.rollForTravelTimeInMinutes(finalClosestPatrol.eta, finalClosestPatrol.etaWithTraffic)
-    //                       const totalTimeFromAssignment = fixTimeMins + travelTimeMins;
-    //                       const completionTime = this.addSeconds(this.currentTime, totalTimeFromAssignment*60)
-                          
-    //                       // assign closest patrol to job
-    //                       this.patrols[finalClosestPatrol.patrolId].onJob = true;
-    //                       this.patrols[finalClosestPatrol.patrolId].assignedJob = activeJob.jobId;
-    //                       this.patrols[finalClosestPatrol.patrolId].assignedJobLoc = activeJob.coordinates;
-    //                       this.patrols[finalClosestPatrol.patrolId].routePath = finalClosestPatrol.routePath;
-    //                       this.patrols[finalClosestPatrol.patrolId].travelTimeActualMins = travelTimeMins;
-    //                       this.patrols[finalClosestPatrol.patrolId].routeInterval = this.getRouteInterval(travelTimeMins, finalClosestPatrol.routePath.length);
-    //                       this.patrols[finalClosestPatrol.patrolId].assignedSimIteration = this.iteration;
-                          
-    //                       this.logAssignedJobToJson(finalClosestPatrol, activeJob, this.getRouteInterval(travelTimeMins, finalClosestPatrol.routePath.length), travelTimeMins)
-    //                       // update job as assigned with eta, patrolAssigned etc.
-    //                       const updateActiveJob = {...this.jobMap.get(activeJob.jobId)}
-    //                       // console.log('updateActiveJob', updateActiveJob)
-    //                       // console.log('updateActiveJob', updateActiveJob)
-    //                       updateActiveJob.patrolAssigned = true;
-    //                       const dateCopy = new Date(this.currentTime);
-    //                       updateActiveJob.assignmentTime = dateCopy;
-    //                       updateActiveJob.travelTimeActual = travelTimeMins;
-    //                       updateActiveJob.completionTime = completionTime;                                               
-    //                       updateActiveJob.eta = finalClosestPatrol.eta;
-    //                       updateActiveJob.etaWithTraffic = finalClosestPatrol.etaWithTraffic;
-    //                       updateActiveJob.patrolId = finalClosestPatrol.patrolId;
-    //                       this.jobMap.set(activeJob.jobId, updateActiveJob)
-    //                       this.assignFreePatrolsToQueued();                                           
-    //                     }
-    //                 })
-    //                 .catch((error) => {
-    //                     console.log(error);
-    //                 });
-    //         }
-        
-    // }
       async assignFreePatrolsToQueued() {
         console.log('ASSIGNING PATROLS');
         // loop through jobs map and check for patrolAssigned
@@ -395,8 +301,6 @@ class Simulation {
         this.iteration > this.patrols[patrol].assignedSimIteration && 
         this.patrols[patrol].currentLocation[0] !== this.patrols[patrol].assignedJobLoc[0] && 
         this.patrols[patrol].currentLocation[1] !== this.patrols[patrol].assignedJobLoc[1]) {
-          
-
           if (this.patrols[patrol].currentRouteIndex + this.patrols[patrol].routeInterval < this.patrols[patrol].routePath.length) {
             this.patrols[patrol].currentRouteIndex += this.patrols[patrol].routeInterval;
             this.patrols[patrol].currentLocation = this.patrols[patrol].routePath[this.patrols[patrol].currentRouteIndex];
@@ -406,31 +310,21 @@ class Simulation {
             this.patrols[patrol].currentLocation = this.patrols[patrol].assignedJobLoc;
             this.logPingsToJson(this.patrols[patrol], this.patrols[patrol].currentLocation, this.patrols[patrol].currentRouteIndex, this.patrols[patrol].routePath.length);
           }
-
-
         }
       }
     }
 
-    //generate time for fix
     rollForFixTimeInMinutes() {
       const fixTime = Math.random() * (60 - 10) + 10;
       return fixTime
     }
 
-    //generate time for travel
     rollForTravelTimeInMinutes(eta, etaWithTraffic) {
       const travelTime = Math.random() * (etaWithTraffic - eta) + eta
       return travelTime /60
     }   
     
-    rollForNewJob() {
-        const prob = (this.projectedJobCountForDuration/this.simDurationHours)/20;
-        const roll = Math.random();
-        if (roll < prob) {
-            this.logNewBreakdown();
-        } 
-    }
+    
     getRouteInterval(travelTimeActualMins, routePathArrLength) {
       const intervalMins = travelTimeActualMins / 5;
       const arrInterval = Math.floor(routePathArrLength / intervalMins)

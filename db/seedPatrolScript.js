@@ -16,11 +16,12 @@ async function getPatrolSpawns(patrolCount) {
   return spawnArr;
 }
   
-getPatrolSpawns(900)
+getPatrolSpawns(500)
 .then(spawnArr => {
   console.log(spawnArr.length)
   seedPatrolSpawns(spawnArr)
   .then(() => {
+    console.log('seeding complete')
     db.end()
   })
   .catch((error) => {

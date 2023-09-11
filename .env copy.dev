@@ -1,3 +1,0 @@
-# PGDATABASE=breakdown_service
-BING_MAPS_API_KEY=Ar9kKaB9YZmOVKisMev3y_uwZjSiP6UqlVwDSweBa4QZfpxnKr27cHzDWBy0Vg44
-DATABASE_URL=postgres://breakdown_service_user:vOeFLz9KWnt91Z3G6mjqpVExvfqPaNto@dpg-cj453rp8g3nakvhrpbqg-a.frankfurt-postgres.render.com/breakdown_service
