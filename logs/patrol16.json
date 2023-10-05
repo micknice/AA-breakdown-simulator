@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol16",
+  "spawnLocationDetails": {
+    "latitude": 58.4917629976852,
+    "longitude": -4.44013239985483,
+    "addressLine": "Kyle of Tongue Causeway",
+    "locality": "Lairg",
+    "neighborhood": "Kildonan",
+    "adminDivision": "",
+    "adminDivision2": "",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "IV27 4",
+    "formattedAddress": "Kyle of Tongue Causeway, Kildonan, IV27 4, United Kingdom"
+  },
+  "currentLoc": [
+    58.4917629976852,
+    -4.44013239985483
+  ]
+}

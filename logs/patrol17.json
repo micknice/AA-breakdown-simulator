@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol17",
+  "spawnLocationDetails": {
+    "latitude": 51.30636215209961,
+    "longitude": -5.241450786590576,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "",
+    "adminDivision2": "",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "",
+    "formattedAddress": "United Kingdom"
+  },
+  "currentLoc": [
+    51.30636215209961,
+    -5.241450786590576
+  ]
+}

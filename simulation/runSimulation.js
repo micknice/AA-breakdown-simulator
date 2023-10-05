@@ -117,7 +117,9 @@ class Simulation {
         const jobLocsArr = [];
         const values = this.jobMap.values()
         for (const x of values) {
-          jobLocsArr.push(x.coordinates)
+          console.log(x, 'job details at getJobLocs')
+          // jobLocsArr.push(x.coordinates)
+          jobLocsArr.push(x)
         }
         return jobLocsArr
       }

@@ -1,0 +1,20 @@
+{
+  "patrolId": "patrol1",
+  "spawnLocationDetails": {
+    "latitude": 57.74716567993164,
+    "longitude": -4.029408931732178,
+    "addressLine": "",
+    "locality": "",
+    "neighborhood": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "Highland",
+    "countryIso2": "GB",
+    "countryRegion": "United Kingdom",
+    "postalCode": "IV19 1QJ",
+    "formattedAddress": "IV19 1QJ, Scotland, United Kingdom"
+  },
+  "currentLoc": [
+    57.74716567993164,
+    -4.029408931732178
+  ]
+}
