@@ -65,6 +65,7 @@ class Simulation {
           currentLocation: patrol.currentLocation,
           routePath: patrol.routePath,
           currentRouteIndex: patrol.currentRouteIndex,
+          completedJobs: patrol.completedJobs,
         };
       }
       return patrolData;
@@ -290,6 +291,7 @@ class Simulation {
           this.patrols[activeJob.patrolId].assignedSimIteration = null;
           this.patrols[activeJob.patrolId].currentRouteIndex = 0;
           this.patrols[activeJob.patrolId].currentLocation = activeJob.coordinates;
+          this.patrols[activeJob.patrolId].completedJobs += 1;
           console.log('this.patrols[activeJob.patrolId].currentLocation', this.patrols[activeJob.patrolId].currentLocation)
           this.jobMap.delete(value.jobId)
         }

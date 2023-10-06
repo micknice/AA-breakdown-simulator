@@ -16,6 +16,7 @@ class Patrol {
       this.routeInterval = null;
       this.assignedSimIteration = null;
       this.currentRouteIndex = 0;
+      this.completedJobs = 0;
   
       
       this.initSpawnLocation().then(() => {
@@ -25,7 +26,7 @@ class Patrol {
   
     async initSpawnLocation() {
         try {
-          this.spawnLocation = await this.generateRandomPointWithinBounds();
+          const spawnLocation = await this.generateRandomPointWithinBounds();
           console.log('Spawn Location:', this.spawnLocation); 
         } catch (error) {
           console.error('Error setting spawn location:', error);
@@ -42,7 +43,7 @@ class Patrol {
   
       try {
         const resArr = await checkValidMainlandLocation(randomLat, randomLon);
-        if (resArr.length === 0 || resArr[0].countryIso2 !== 'GB') {
+        if (resArr.length === 0 || resArr[0].countryIso2 !== 'GB' || !resArr[0].postalCode ) {
           console.log('Invalid spawn loc- RE-ROLLING!!!');
           return this.generateRandomPointWithinBounds();
         } else {
