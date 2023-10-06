@@ -1,20 +1,20 @@
 {
   "patrolId": "patrol17",
   "spawnLocationDetails": {
-    "latitude": 51.30636215209961,
-    "longitude": -5.241450786590576,
+    "latitude": 55.07510757446289,
+    "longitude": -4.972440719604492,
     "addressLine": "",
     "locality": "",
     "neighborhood": "",
-    "adminDivision": "",
-    "adminDivision2": "",
+    "adminDivision": "Scotland",
+    "adminDivision2": "South Ayrshire",
     "countryIso2": "GB",
     "countryRegion": "United Kingdom",
-    "postalCode": "",
-    "formattedAddress": "United Kingdom"
+    "postalCode": "KA26 0NY",
+    "formattedAddress": "KA26 0NY, Scotland, United Kingdom"
   },
   "currentLoc": [
-    51.30636215209961,
-    -5.241450786590576
+    55.07510757446289,
+    -4.972440719604492
   ]
 }

@@ -63,6 +63,8 @@ class Simulation {
           assignedJob: patrol.assignedJob,
           assignedJobLoc: patrol.assignedJobLoc,
           currentLocation: patrol.currentLocation,
+          routePath: patrol.routePath,
+          currentRouteIndex: patrol.currentRouteIndex,
         };
       }
       return patrolData;
