@@ -1,8 +1,10 @@
+const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const Simulation = require('../simulation/runSimulation');
 
-const server = http.createServer();
+const app = express();
+const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: "*" } });
 
 let simulation;
